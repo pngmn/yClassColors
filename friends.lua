@@ -19,8 +19,7 @@ local function friendsFrame()
 			if (button.buttonType == FRIENDS_BUTTON_TYPE_WOW) then
 				local info = C_FriendList.GetFriendInfoByIndex(button.id)
 				if (info.connected) then
-					nameText = ycc.classColor[info.class] .. info.name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE,
-								ycc.diffColor[info.level] .. info.level .. "|r", info.class)
+					nameText = ycc.classColor[info.class]..info.name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, ycc.diffColor[info.level]..info.level.."|r", info.class)
 					if (info.area == playerArea) then
 						infoText = format("|cff00ff00%s|r", info.area)
 					end
@@ -33,9 +32,7 @@ local function friendsFrame()
 					if (gameAccountInfo.isOnline and gameAccountInfo.clientProgram == BNET_CLIENT_WOW) then
 						local accountInfo = C_BattleNet.GetGameAccountInfoByID(gameAccountInfo.gameAccountID)
 						if (friendAccountInfo.accountName and accountInfo.characterName and accountInfo.className) then
-							nameText = friendAccountInfo.accountName .. " " .. FRIENDS_WOW_NAME_COLOR_CODE ..
-										"(" .. ycc.classColor[accountInfo.className] .. gameAccountInfo.characterName .. " "
-										.. accountInfo.characterLevel .. FRIENDS_WOW_NAME_COLOR_CODE .. ")"
+							nameText = friendAccountInfo.accountName.." "..FRIENDS_WOW_NAME_COLOR_CODE.."("..ycc.classColor[accountInfo.className]..gameAccountInfo.characterName.." "..accountInfo.characterLevel..FRIENDS_WOW_NAME_COLOR_CODE..")"
 							if (accountInfo.areaName == playerArea) then
 								infoText = format("|cff00ff00%s|r", accountInfo.areaName)
 							end
