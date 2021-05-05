@@ -1,0 +1,9 @@
+## Interface: 90005
+## Title: yClassColors
+## Note: Colorize name by class!
+## Author: pngmn
+## Version: 9.0.5-1
+## OptionalDeps: !ClassColors
+
+core.lua
+friends.lua
