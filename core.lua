@@ -3,6 +3,10 @@ local _, ns = ...
 local ycc = {}
 ns.ycc = ycc
 
+ycc.Classic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+ycc.BCC = WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+ycc.Mainline = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+
 local GUILD_INDEX_MAX = 12
 local SMOOTH = {
 	1, 0, 0,
