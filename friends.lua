@@ -2,65 +2,54 @@
 local _, ns = ...
 local ycc = ns.ycc
 
-local WHITE = {r = 1, g = 1, b = 1}
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%$d", "%$s")
-local scrollFrame = ycc.Mainline and FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame
+local scrollFrame = ycc.Retail and FriendsListFrameScrollFrame or FriendsFrameFriendsScrollFrame
 
 local function friendsFrame()
-	local offset = HybridScrollFrame_GetOffset(scrollFrame)
 	local buttons = scrollFrame.buttons
 	local playerArea = GetRealZoneText()
 	for i = 1, #buttons do
 		local nameText, infoText
 		local button = buttons[i]
-		local index = offset + i
 		if (button:IsShown()) then
 			if (button.buttonType == FRIENDS_BUTTON_TYPE_WOW) then
-				if ycc.Mainline then
+				local name, level, class, area, connected
+				if ycc.Retail then
 					local info = C_FriendList.GetFriendInfoByIndex(button.id)
-					if (info.connected) then
-						nameText = ycc.classColor[info.class]..info.name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, ycc.diffColor[info.level]..info.level.."|r", info.class)
-						if (info.area == playerArea) then
-							infoText = format("|cff00ff00%s|r", info.area)
-						end
-					end
+					name, level, class, area, connected = info.name, info.level, info.class, info.area, info.connected
 				else
-					local name, level, class, area, connected, status, note = GetFriendInfo(button.id)
-					if(connected) then
-						nameText = ycc.classColor[class]..name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, ycc.diffColor[level]..level.."|r", class)
-						if(areaName == playerArea) then
-							infoText = format("|cff00ff00%s|r", area)
-						end
+					name, level, class, area, connected = GetFriendInfo(button.id)
+				end
+				if (connected) then
+					nameText = ycc.classColor[class]..name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, ycc.diffColor[level]..level.."|r", class)
+					if (area == playerArea) then
+						infoText = format("|cff00ff00%s|r", area)
 					end
 				end
 			elseif (button.buttonType == FRIENDS_BUTTON_TYPE_BNET) then
-				if ycc.Mainline then
+				local _, presenceName, name, toonID, client, isOnline, class, area, level
+				if ycc.Retail then
 					local friendAccountInfo = C_BattleNet.GetFriendAccountInfo(button.id)
-					local numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(button.id)
-					for j = 1, numGameAccounts do
-						local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(button.id, j)
+					presenceName = friendAccountInfo.accountName
+					for i = 1, C_BattleNet.GetFriendNumGameAccounts(button.id) do
+						local gameAccountInfo = C_BattleNet.GetFriendGameAccountInfo(button.id, i)
 						if (gameAccountInfo.isOnline and gameAccountInfo.clientProgram == BNET_CLIENT_WOW) then
 							local accountInfo = C_BattleNet.GetGameAccountInfoByID(gameAccountInfo.gameAccountID)
-							if (friendAccountInfo.accountName and accountInfo.characterName and accountInfo.className) then
-								nameText = friendAccountInfo.accountName.." "..FRIENDS_WOW_NAME_COLOR_CODE.."("..ycc.classColor[accountInfo.className]..gameAccountInfo.characterName.." "..accountInfo.characterLevel..FRIENDS_WOW_NAME_COLOR_CODE..")"
-								if (accountInfo.areaName == playerArea) then
-									infoText = format("|cff00ff00%s|r", accountInfo.areaName)
-								end
-							end
+							name, class, area, level = accountInfo.characterName, accountInfo.className, accountInfo.areaName, accountInfo.characterLevel
 							break
 						end
 					end
 				else
-					local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(button.id)
+					_, presenceName, _, _, _, toonID, client, isOnline = BNGetFriendInfo(button.id)
 					if (isOnline and client == BNET_CLIENT_WOW) then
-						local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime = BNGetGameAccountInfo(toonID)
-						if (presenceName and toonName and class) then
-							nameText = presenceName.." "..FRIENDS_WOW_NAME_COLOR_CODE.."("..ycc.classColor[class]..toonName.." "..level..FRIENDS_WOW_NAME_COLOR_CODE..")"
-							if (zoneName == playerArea) then
-								infoText = format("|cff00ff00%s|r", zoneName)
-							end
-						end
+						_, name, _, _, _, _, _, class, _, area, level = BNGetGameAccountInfo(toonID)
+					end
+				end
+				if (presenceName and name and class) then
+					nameText = presenceName.." "..FRIENDS_WOW_NAME_COLOR_CODE.."("..ycc.classColor[class]..name.." "..level..FRIENDS_WOW_NAME_COLOR_CODE..")"
+					if (area == playerArea) then
+						infoText = format("|cff00ff00%s|r", area)
 					end
 				end
 			end
