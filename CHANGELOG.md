@@ -1,2 +1,3 @@
-### Changed in 9.0.5-1
-- Public release
+yClassColors | 1.0.0
+--------------------
+- First release
