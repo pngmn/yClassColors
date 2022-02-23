@@ -1,9 +1,0 @@
-## Interface: 11307
-## Title: yClassColors
-## Notes: Colorize name by class!
-## Author: pngmn
-## Version: @project-version@
-## OptionalDeps: !ClassColors
-
-core.lua
-friends.lua

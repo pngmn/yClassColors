@@ -60,12 +60,12 @@ ycc.guildRankColor = setmetatable({}, {
 	__index = function(t, i)
 		if i then
 			local c = Hex(ColorGradient(i/GUILD_INDEX_MAX, unpack(SMOOTH)))
-            if(c) then
-                t[i] = c
-                return c
-            else
-                t[i] = t[0]
-            end
+			if(c) then
+				t[i] = c
+				return c
+			else
+				t[i] = t[0]
+			end
 		end
 	end
 })
@@ -74,8 +74,8 @@ ycc.guildRankColor[0] = WHITE_HEX
 ycc.diffColor = setmetatable({}, {
 	__index = function(t,i)
 		local c = i and GetQuestDifficultyColor(i)
-        t[i] = c and Hex(c) or t[0]
-        return t[i]
+		t[i] = c and Hex(c) or t[0]
+		return t[i]
 	end
 })
 ycc.diffColor[0] = WHITE_HEX
@@ -83,28 +83,28 @@ ycc.diffColor[0] = WHITE_HEX
 ycc.classColor = setmetatable({}, {
 	__index = function(t,i)
 		local c = i and RAID_CLASS_COLORS[BC[i] or i]
-        if (c) then
-            t[i] = Hex(c)
-            return t[i]
-        else
-            return WHITE_HEX
-        end
+		if (c) then
+			t[i] = Hex(c)
+			return t[i]
+		else
+			return WHITE_HEX
+		end
 	end
 })
 
 local WHITE = {1,1,1}
 ycc.classColorRaw = setmetatable({}, {
-    __index = function(t, i)
-        local c = i and RAID_CLASS_COLORS[BC[i] or i]
-        if not c then return WHITE end
-        t[i] = c
-        return c
-    end
+	__index = function(t, i)
+		local c = i and RAID_CLASS_COLORS[BC[i] or i]
+		if not c then return WHITE end
+		t[i] = c
+		return c
+	end
 })
 
 if CUSTOM_CLASS_COLORS then
 	CUSTOM_CLASS_COLORS:RegisterCallback(function()
-        wipe(ycc.classColorRaw)
-        wipe(ycc.classColor)
-    end)
+		wipe(ycc.classColorRaw)
+		wipe(ycc.classColor)
+	end)
 end
